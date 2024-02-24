@@ -12,6 +12,7 @@ To run this project, you'll need:
 - PIP3
 - Flask
 - Bootstrap v5.3
+- SQLite3
 
 ## Installation
 
