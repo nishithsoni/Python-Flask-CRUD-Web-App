@@ -1,0 +1,122 @@
+{% extends 'base.html' %}
+{% include 'header.html' %}
+
+{% block body %}
+<div class="container">
+    <div class="row">
+        <div class="col md-12">
+            <div class="jumbotron p-3 table-responsive">
+                <h2>Manage <b>Users</b>
+                    <button type="button" class="btn btn-success float-end" data-bs-toggle="modal" data-bs-target="#createModal">
+                        Add New User
+                    </button>
+                </h2>
+
+                {%with messages = get_flashed_messages()%}
+                {%if messages%}
+                {% for message in messages %}
+                    <div class="alert alert-success alert-dismissable fade show mt-3" role="alert">
+                        {{message}}
+                        <button type="button" class="btn-close float-end" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                {%endfor%}
+                {%endif%}
+                {%endwith%}
+
+                
+                <table class="table table-hover table-dark">
+                    <thead>
+                        <form class="d-flex" role="search" form action="{{ url_for('search') }}" method="POST">
+                            <input class="d-flex form-control w-auto float-end" type="search" name="search" placeholder="Search User Name" aria-label="Search">
+                        </form>
+                        <tr>
+                            <th>Name</th>
+                            <th>ID 🔑</th>
+                            <th>Points</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody class="table-group-divider">
+                        {% for user in users %}
+                        <tr>
+                            <td>{{ user.0 }}</td>
+                            <td>{{ user.1 }}</td>
+                            <td>{{ user.2 }}</td>
+                            <td>
+                                <a href="/update/{{ user.1 }}" class="btn btn-primary btn-xs" data-bs-toggle="modal" data-bs-target="#editModal{{ user.1 }}">Edit</a>
+                                <a href="/delete/{{ user.1 }}" class="btn btn-danger btn-xs" onclick="return confirm('Are You Sure You Want To Delete?')">Delete</a>
+                            </td>
+                        </tr>
+    
+                        <div id="editModal{{ user.1 }}" class="modal fade" role="dialog">
+                            <div class="modal-dialog modal-dialog-centered">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h4 class="modal-title">Update Information</h4>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <form action="{{ url_for('update') }}" method="POST">
+                                            <div class="form-group mb-3">
+                                                <label for="">Name</label>
+                                                <input type="text" class="form-control" name="name" value="{{user.0}}">
+                                            </div>
+                                            <div class="form-group mb-3">
+                                                <label for="">ID 🔑</label>
+                                                <input type="number" class="form-control"" name="id" value="{{user.1}}" readonly="readonly">
+                                            </div>
+                                            <div class="form-group mb-3">
+                                                <label for="">Points</label>
+                                                <input type="number" class="form-control" name="points" value="{{user.2}}">
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                                <button type="submit" class="btn btn-primary">Update</button>
+                                             </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </tbody>
+                    
+                    {% endfor %}
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="createModal" class="modal fade" role="dialog">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Add User</h4>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form action="{{ url_for('insert') }}" method="POST">
+                    <div class="form-group mb-3">
+                        <label for="">Name</label>
+                        <input type="text" class="form-control" name="name" placeholder="John Doe" required="1">
+                    </div>
+                    <div class="form-group mb-3">
+                        <label for="">ID 🔑</label>
+                        <input type="number" class="form-control" name="id" placeholder="123" required="1">
+                    </div>
+                    <div class="form-group mb-3">
+                        <label for="">Points</label>
+                        <input type="number" class="form-control" name="points" placeholder="10" required="1">
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary">Create</button>
+                     </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% include "footer.html" %}
+{% endblock %}
