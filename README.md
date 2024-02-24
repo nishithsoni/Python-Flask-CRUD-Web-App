@@ -24,5 +24,5 @@ Here are the steps to install this project:
 
 To run this project, use the following commands:
 
-python3 create_table.py
-python3 app.py
+- python3 create_table.py
+- python3 app.py
